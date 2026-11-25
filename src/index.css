@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Archivo', system-ui, -apple-system, sans-serif;
+    background-color: #f4f4f4;
+    color: #010817;
+    margin: 0;
+  }
+}
+
+.font-archivo {
+  font-family: 'Archivo', system-ui, -apple-system, sans-serif;
+  font-variation-settings: 'wdth' 100;
+}
+
+.font-inter {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
