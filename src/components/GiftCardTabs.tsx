@@ -1,7 +1,7 @@
 import type { ScreenId } from '../types/giftCard';
 
 interface GiftCardTabsProps {
-  activeTab: 'available' | 'active' | 'used';
+  activeTab: 'available' | 'active' | 'used' | 'gift';
   availableCount: number;
   activeCount: number;
   usedCount: number;
@@ -16,9 +16,9 @@ export function GiftCardTabs({
   onSelectTab,
 }: GiftCardTabsProps) {
   const tabs: {
-    key: 'available' | 'active' | 'used';
+    key: 'available' | 'active' | 'used' | 'gift';
     label: string;
-    count: number;
+    count?: number;
     target: ScreenId;
   }[] = [
     { key: 'available', label: 'Available', count: availableCount, target: '01-available' },
@@ -29,11 +29,12 @@ export function GiftCardTabs({
       target: activeCount === 0 ? '18-empty-active' : '06-active',
     },
     { key: 'used', label: 'Inactive/Used', count: usedCount, target: '10-inactive-used' },
+    { key: 'gift', label: 'Gift a card', target: '19-gift-select' },
   ];
 
   return (
     <div className="flex flex-col w-full">
-      <div className="flex gap-[32px] items-start w-full">
+      <div className="flex flex-wrap gap-[24px] md:gap-[32px] items-start w-full">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.key;
           return (
@@ -52,9 +53,11 @@ export function GiftCardTabs({
               >
                 {tab.label}
               </span>
-              <span className="bg-[#ef8c37] px-[6px] py-[4px] rounded-[30px] font-archivo font-normal text-[14px] leading-[14px] text-[#010817] text-center">
-                {tab.count}
-              </span>
+              {typeof tab.count === 'number' && (
+                <span className="bg-[#ef8c37] px-[6px] py-[4px] rounded-[30px] font-archivo font-normal text-[14px] leading-[14px] text-[#010817] text-center">
+                  {tab.count}
+                </span>
+              )}
             </button>
           );
         })}

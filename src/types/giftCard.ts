@@ -16,7 +16,11 @@ export type ScreenId =
   | '15-service-payment-success'
   | '16-checkout-eligibility-error'
   | '17-checkout-insufficient-balance'
-  | '18-empty-active';
+  | '18-empty-active'
+  | '19-gift-select'
+  | '20-gift-transfer'
+  | '21-gift-success'
+  | '22-gift-failed';
 
 export type CardTheme = 'green' | 'peach' | 'dark';
 
@@ -33,6 +37,15 @@ export interface PaymentHistoryItem {
   balanceAfter: number;
 }
 
+export interface TransferDetails {
+  recipientEmail: string;
+  recipientName?: string;
+  message?: string;
+  transferredAmount: number;
+  reference: string;
+  transferredDate: string;
+}
+
 export interface GiftCardItem {
   id: string;
   code: string;
@@ -44,4 +57,5 @@ export interface GiftCardItem {
   status: 'unredeemed' | 'linked' | 'used';
   theme: CardTheme;
   history: PaymentHistoryItem[];
+  transferDetails?: TransferDetails;
 }

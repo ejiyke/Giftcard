@@ -164,20 +164,15 @@ export function ManageCardsScreens({
         </div>
 
         <div className="flex flex-col lg:flex-row gap-[32px] items-start w-full">
-          <div className="bg-[#010817] flex flex-1 flex-col gap-[20px] items-start p-[32px] rounded-[12px] text-white w-full">
-            <p className="font-archivo font-medium text-[14px] leading-normal whitespace-pre-wrap">
-              {'connect NIGERIA   /   GIFT CARD'}
-            </p>
-            <p className="font-archivo font-semibold text-[29.03px] leading-normal">
-              {formatNaira(selectedCard.currentBalance)}
-            </p>
-            <p className="font-archivo font-normal text-[14px] leading-[115.625%]">
-              Current balance
-            </p>
-            <div className="bg-[#ebebeb] h-px w-full" />
-            <p className="font-archivo font-semibold text-[20.16px] leading-normal">
-              {selectedCard.code}
-            </p>
+          <div className="flex flex-1 w-full">
+            <GiftCardVisual
+              amount={selectedCard.currentBalance}
+              theme="dark"
+              label="Current balance"
+              subtitle="Ready to use or share"
+              code={selectedCard.code}
+              className="min-h-[228px] p-[28px]"
+            />
           </div>
 
           <div className="bg-white flex flex-1 flex-col gap-[20px] items-start p-[32px] rounded-[12px] w-full">
@@ -217,6 +212,12 @@ export function ManageCardsScreens({
                 onClick={() => onSelectCard(selectedCard, '08-share')}
               >
                 Share gift card
+              </ActionButton>
+              <ActionButton
+                variant="secondary"
+                onClick={() => onSelectCard(selectedCard, '20-gift-transfer')}
+              >
+                Transfer ownership
               </ActionButton>
             </div>
           </div>
@@ -416,19 +417,15 @@ export function ManageCardsScreens({
         </div>
 
         <div className="flex flex-col lg:flex-row gap-[32px] items-start w-full">
-          <div className="bg-[#010817] flex flex-1 flex-col gap-[16px] items-start p-[28px] rounded-[12px] text-white w-full">
-            <p className="font-archivo font-medium text-[14px] leading-normal whitespace-pre-wrap">
-              {'connect NIGERIA   /   GIFT CARD'}
-            </p>
-            <p className="font-archivo font-semibold text-[29.03px] leading-normal">
-              {formatNaira(linkedCard.currentBalance)}
-            </p>
-            <p className="font-archivo font-normal text-[14px] leading-[115.625%]">
-              Current balance · {formatNaira(linkedCard.initialValue)} initial value
-            </p>
-            <p className="font-archivo font-semibold text-[20.16px] leading-normal">
-              {linkedCard.code}
-            </p>
+          <div className="flex flex-1 w-full">
+            <GiftCardVisual
+              amount={linkedCard.currentBalance}
+              theme="dark"
+              label={`Current balance · ${formatNaira(linkedCard.initialValue)} initial value`}
+              subtitle="Linked to recipient"
+              code={linkedCard.code}
+              className="min-h-[228px] p-[28px]"
+            />
           </div>
 
           <div className="bg-white flex flex-1 flex-col gap-[16px] items-start p-[28px] rounded-[12px] w-full">
@@ -450,12 +447,20 @@ export function ManageCardsScreens({
                 {formatNaira(totalUsed)}
               </span>
             </div>
-            <ActionButton
-              variant="secondary"
-              onClick={() => onCopyCode(linkedCard.code)}
-            >
-              {isCopied ? 'Code copied' : 'Copy code'}
-            </ActionButton>
+            <div className="flex flex-wrap gap-[16px]">
+              <ActionButton
+                variant="secondary"
+                onClick={() => onCopyCode(linkedCard.code)}
+              >
+                {isCopied ? 'Code copied' : 'Copy code'}
+              </ActionButton>
+              <ActionButton
+                variant="primary"
+                onClick={() => onSelectCard(linkedCard, '20-gift-transfer')}
+              >
+                Transfer ownership
+              </ActionButton>
+            </div>
             <p className="font-archivo font-normal text-[14px] leading-[115.625%] text-[#6c727f]">
               Copying the code does not change who can use it.
             </p>
@@ -535,7 +540,9 @@ export function ManageCardsScreens({
               <GiftCardVisual
                 amount={card.initialValue}
                 theme="peach"
-                subtitle="Fully used · Balance ₦0"
+                subtitle={
+                  card.transferDetails ? 'Transferred · Balance ₦0' : 'Fully used · Balance ₦0'
+                }
               />
             </div>
 
@@ -544,7 +551,9 @@ export function ManageCardsScreens({
                 {formatNaira(card.initialValue)} gift card
               </h2>
               <p className="font-archivo font-semibold text-[16.8px] leading-normal text-[#6c727f]">
-                Fully used
+                {card.transferDetails
+                  ? `Transferred to ${card.transferDetails.recipientEmail}`
+                  : 'Fully used'}
               </p>
               <p className="font-archivo font-normal text-[14px] leading-[115.625%] text-[#010817] whitespace-pre-wrap">
                 {`${card.code}   ·   Purchased ${card.purchasedDate}`}
@@ -613,7 +622,11 @@ export function ManageCardsScreens({
 
         <div className="bg-white flex flex-col md:flex-row gap-[40px] items-start p-[28px] rounded-[12px] w-full">
           <div className="bg-[#fce8d7] flex flex-1 flex-col gap-[14px] items-start p-[24px] rounded-[12px] text-[#010817] w-full">
-            <p className="font-archivo font-semibold text-[16.8px] leading-normal">Fully used</p>
+            <p className="font-archivo font-semibold text-[16.8px] leading-normal">
+              {usedCard.transferDetails
+                ? `Transferred to ${usedCard.transferDetails.recipientEmail}`
+                : 'Fully used'}
+            </p>
             <p className="font-archivo font-semibold text-[29.03px] leading-normal">₦0</p>
             <p className="font-archivo font-normal text-[14px] leading-[115.625%]">
               Current balance · {usedCard.code}

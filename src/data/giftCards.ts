@@ -92,6 +92,10 @@ export const SCREEN_LIST: { id: ScreenId; code: string; label: string }[] = [
   { id: '16-checkout-eligibility-error', code: '16', label: 'Checkout — Eligibility error' },
   { id: '17-checkout-insufficient-balance', code: '17', label: 'Checkout — Insufficient' },
   { id: '18-empty-active', code: '18', label: 'Empty active' },
+  { id: '19-gift-select', code: '19', label: 'Gift — Select card' },
+  { id: '20-gift-transfer', code: '20', label: 'Gift — Transfer ownership' },
+  { id: '21-gift-success', code: '21', label: 'Gift — Transfer successful' },
+  { id: '22-gift-failed', code: '22', label: 'Gift — Transfer failed' },
 ];
 
 export function formatNaira(amount: number): string {

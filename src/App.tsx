@@ -6,10 +6,16 @@ import {
   INITIAL_ACTIVE_CARDS,
   INITIAL_USED_CARDS,
 } from './data/giftCards';
+import { GiftTransferScreens } from './screens/GiftTransferScreens';
 import { ManageCardsScreens } from './screens/ManageCardsScreens';
 import { PurchaseFlowScreens } from './screens/PurchaseFlowScreens';
 import { ServiceCheckoutScreens } from './screens/ServiceCheckoutScreens';
-import type { Denomination, GiftCardItem, ScreenId } from './types/giftCard';
+import type {
+  Denomination,
+  GiftCardItem,
+  ScreenId,
+  TransferDetails,
+} from './types/giftCard';
 
 export function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('01-available');
@@ -20,6 +26,10 @@ export function App() {
   const [lastPurchasedCard, setLastPurchasedCard] = useState<GiftCardItem>(
     INITIAL_ACTIVE_CARDS[1]
   );
+  const [lastTransferSummary, setLastTransferSummary] = useState<{
+    card: GiftCardItem;
+    transfer: TransferDetails;
+  } | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   const handleCopyCode = (code: string) => {
@@ -119,6 +129,46 @@ export function App() {
     setCurrentScreen('09-linked-recipient');
   };
 
+  const handleCompleteTransfer = (
+    cardCode: string,
+    input: { recipientEmail: string; recipientName?: string; message?: string }
+  ) => {
+    const target = activeCards.find((c) => c.code.toUpperCase() === cardCode.toUpperCase());
+    if (!target || target.currentBalance <= 0) return;
+
+    const transferredDate = '26 Nov 2026';
+    const transfer: TransferDetails = {
+      recipientEmail: input.recipientEmail,
+      recipientName: input.recipientName,
+      message: input.message,
+      transferredAmount: target.currentBalance,
+      reference: `TRF-261126-${Math.floor(1000 + Math.random() * 9000)}`,
+      transferredDate,
+    };
+
+    const newEntry = {
+      date: transferredDate,
+      service: `Ownership transferred to ${transfer.recipientEmail}`,
+      deduction: target.currentBalance,
+      balanceAfter: 0,
+    };
+
+    const movedCard: GiftCardItem = {
+      ...target,
+      currentBalance: 0,
+      status: 'used',
+      lastUsedDate: transferredDate,
+      history: [newEntry, ...target.history],
+      transferDetails: transfer,
+    };
+
+    setActiveCards((prev) => prev.filter((c) => c.id !== target.id));
+    setUsedCards((prev) => [movedCard, ...prev]);
+    setSelectedCard(movedCard);
+    setLastTransferSummary({ card: movedCard, transfer });
+    setCurrentScreen('21-gift-success');
+  };
+
   const isPurchaseScreen =
     currentScreen === '01-available' ||
     currentScreen === '02-buy' ||
@@ -134,6 +184,12 @@ export function App() {
     currentScreen === '10-inactive-used' ||
     currentScreen === '11-used-details' ||
     currentScreen === '18-empty-active';
+
+  const isGiftTransferScreen =
+    currentScreen === '19-gift-select' ||
+    currentScreen === '20-gift-transfer' ||
+    currentScreen === '21-gift-success' ||
+    currentScreen === '22-gift-failed';
 
   return (
     <div className="min-h-screen bg-[#f4f4f4] flex flex-col">
@@ -169,7 +225,20 @@ export function App() {
           />
         )}
 
-        {!isPurchaseScreen && !isManageScreen && (
+        {isGiftTransferScreen && (
+          <GiftTransferScreens
+            screen={currentScreen}
+            activeCards={activeCards}
+            usedCards={usedCards}
+            selectedCard={selectedCard}
+            lastTransferSummary={lastTransferSummary}
+            onSelectCardToGift={setSelectedCard}
+            onCompleteTransfer={handleCompleteTransfer}
+            onNavigate={setCurrentScreen}
+          />
+        )}
+
+        {!isPurchaseScreen && !isManageScreen && !isGiftTransferScreen && (
           <ServiceCheckoutScreens
             screen={currentScreen}
             activeCards={activeCards}
