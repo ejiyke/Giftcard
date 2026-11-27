@@ -57,6 +57,8 @@ export function App() {
       purchasedDate: '25 Nov 2026',
       status: 'unredeemed',
       theme: selectedDenom.theme,
+      artStyle: selectedDenom.artStyle,
+      colorVariant: selectedDenom.colorVariant,
       history: [],
     };
     setActiveCards((prev) => [newCard, ...prev]);

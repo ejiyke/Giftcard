@@ -92,7 +92,12 @@ export function ManageCardsScreens({
               key={card.id}
               className="bg-white flex flex-col gap-[18px] items-start p-[24px] rounded-[12px]"
             >
-              <GiftCardVisual amount={card.initialValue} theme={card.theme} />
+              <GiftCardVisual
+                amount={card.initialValue}
+                theme={card.theme}
+                artStyle={card.artStyle}
+                colorVariant={card.colorVariant}
+              />
               <p className="font-archivo font-semibold text-[16.8px] leading-normal text-[#010817]">
                 {card.status === 'linked' ? 'Linked to a recipient' : 'Not yet redeemed'}
               </p>
@@ -167,7 +172,9 @@ export function ManageCardsScreens({
           <div className="flex flex-1 w-full">
             <GiftCardVisual
               amount={selectedCard.currentBalance}
-              theme="dark"
+              theme={selectedCard.theme}
+              artStyle={selectedCard.artStyle}
+              colorVariant={selectedCard.colorVariant}
               label="Current balance"
               subtitle="Ready to use or share"
               code={selectedCard.code}
@@ -420,7 +427,9 @@ export function ManageCardsScreens({
           <div className="flex flex-1 w-full">
             <GiftCardVisual
               amount={linkedCard.currentBalance}
-              theme="dark"
+              theme={linkedCard.theme}
+              artStyle={linkedCard.artStyle}
+              colorVariant={linkedCard.colorVariant}
               label={`Current balance · ${formatNaira(linkedCard.initialValue)} initial value`}
               subtitle="Linked to recipient"
               code={linkedCard.code}
@@ -540,6 +549,7 @@ export function ManageCardsScreens({
               <GiftCardVisual
                 amount={card.initialValue}
                 theme="peach"
+                artStyle={card.artStyle}
                 subtitle={
                   card.transferDetails ? 'Transferred · Balance ₦0' : 'Fully used · Balance ₦0'
                 }

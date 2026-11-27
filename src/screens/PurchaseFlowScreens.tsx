@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DENOMINATIONS, formatNaira } from '../data/giftCards';
+import { COLOR_VARIANTS, DENOMINATIONS, formatNaira } from '../data/giftCards';
 import type { Denomination, GiftCardItem, ScreenId } from '../types/giftCard';
 import { ActionButton } from '../components/Buttons';
 import { GiftCardTabs } from '../components/GiftCardTabs';
@@ -103,7 +103,12 @@ export function PurchaseFlowScreens({
                 key={denom.amount}
                 className="bg-white flex flex-col gap-[16px] items-start p-[16px] rounded-[12px]"
               >
-                <GiftCardVisual amount={denom.amount} theme={denom.theme} />
+                <GiftCardVisual
+                  amount={denom.amount}
+                  theme={denom.theme}
+                  artStyle={denom.artStyle}
+                  label={denom.occasion}
+                />
                 <ActionButton
                   variant="primary"
                   onClick={() => {
@@ -146,7 +151,77 @@ export function PurchaseFlowScreens({
 
         <div className="flex flex-col lg:flex-row gap-[32px] items-start w-full">
           <div className="bg-white flex flex-1 flex-col gap-[24px] items-start p-[32px] rounded-[12px] w-full">
-            <GiftCardVisual amount={selectedDenom.amount} theme="dark" />
+            <GiftCardVisual
+              amount={selectedDenom.amount}
+              theme={selectedDenom.theme}
+              artStyle={selectedDenom.artStyle}
+              colorVariant={selectedDenom.colorVariant}
+              label={selectedDenom.occasion}
+            />
+            <div className="flex flex-col gap-[10px] w-full">
+              <p className="font-archivo font-medium text-[13px] text-[#6c727f]">
+                Choose a card design
+              </p>
+              <div className="flex flex-wrap gap-[8px]">
+                {DENOMINATIONS.map((d) => {
+                  const isChosen = selectedDenom.artStyle === d.artStyle;
+                  return (
+                    <button
+                      key={d.artStyle}
+                      type="button"
+                      onClick={() =>
+                        onSelectDenom({
+                          ...selectedDenom,
+                          artStyle: d.artStyle,
+                          occasion: d.occasion,
+                          theme: d.theme,
+                        })
+                      }
+                      className={`px-[12px] py-[6px] rounded-full font-archivo text-[13px] transition-colors cursor-pointer ${
+                        isChosen
+                          ? 'bg-[#010817] text-white font-semibold'
+                          : 'bg-[#f4f4f4] text-[#344054] hover:bg-[#ebebeb]'
+                      }`}
+                    >
+                      {d.occasion}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="flex flex-col gap-[10px] w-full">
+              <p className="font-archivo font-medium text-[13px] text-[#6c727f]">
+                Choose a color variant
+              </p>
+              <div className="flex flex-wrap gap-[8px]">
+                {COLOR_VARIANTS.map((v) => {
+                  const activeVariant = (selectedDenom.colorVariant || 'original') === v.id;
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() =>
+                        onSelectDenom({
+                          ...selectedDenom,
+                          colorVariant: v.id,
+                        })
+                      }
+                      className={`inline-flex items-center gap-[6px] px-[12px] py-[6px] rounded-full font-archivo text-[13px] transition-colors cursor-pointer ${
+                        activeVariant
+                          ? 'bg-[#010817] text-white font-semibold'
+                          : 'bg-[#f4f4f4] text-[#344054] hover:bg-[#ebebeb]'
+                      }`}
+                    >
+                      <span
+                        className="inline-block size-[10px] rounded-full ring-1 ring-black/15"
+                        style={{ backgroundColor: v.swatch }}
+                      />
+                      <span>{v.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
             <h2 className="font-archivo font-semibold text-[24.19px] leading-normal text-[#010817]">
               One card. Plenty of possibilities.
             </h2>

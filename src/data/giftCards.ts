@@ -1,12 +1,30 @@
-import type { Denomination, GiftCardItem, ScreenId } from '../types/giftCard';
+import type {
+  CardColorVariant,
+  Denomination,
+  GiftCardItem,
+  ScreenId,
+} from '../types/giftCard';
+
+export const COLOR_VARIANTS: {
+  id: CardColorVariant;
+  label: string;
+  swatch: string;
+}[] = [
+  { id: 'original', label: 'Original', swatch: '#fa84be' },
+  { id: 'green', label: 'CN Green', swatch: '#35bb25' },
+  { id: 'peach', label: 'Warm Peach', swatch: '#ef8c37' },
+  { id: 'dark', label: 'Obsidian', swatch: '#010817' },
+  { id: 'blue', label: 'Royal Blue', swatch: '#3b6cf7' },
+  { id: 'gold', label: 'Lagos Gold', swatch: '#f6d34a' },
+];
 
 export const DENOMINATIONS: Denomination[] = [
-  { amount: 5000, label: '₦5,000', theme: 'green' },
-  { amount: 10000, label: '₦10,000', theme: 'peach' },
-  { amount: 20000, label: '₦20,000', theme: 'dark' },
-  { amount: 25000, label: '₦25,000', theme: 'green' },
-  { amount: 50000, label: '₦50,000', theme: 'peach' },
-  { amount: 100000, label: '₦100,000', theme: 'dark' },
+  { amount: 5000, label: '₦5,000', theme: 'green', artStyle: 'celebration', occasion: 'Cheers & Celebration' },
+  { amount: 10000, label: '₦10,000', theme: 'peach', artStyle: 'gift', occasion: 'Thoughtful Gift' },
+  { amount: 20000, label: '₦20,000', theme: 'dark', artStyle: 'bouquet', occasion: 'Special Moments' },
+  { amount: 25000, label: '₦25,000', theme: 'green', artStyle: 'lagos', occasion: 'Lagos Express' },
+  { amount: 50000, label: '₦50,000', theme: 'peach', artStyle: 'ankara', occasion: 'Ankara & Style' },
+  { amount: 100000, label: '₦100,000', theme: 'dark', artStyle: 'fireworks', occasion: 'Grand Fireworks' },
 ];
 
 export const INITIAL_ACTIVE_CARDS: GiftCardItem[] = [
@@ -19,6 +37,7 @@ export const INITIAL_ACTIVE_CARDS: GiftCardItem[] = [
     firstRedeemedDate: '19 Nov 2026',
     status: 'linked',
     theme: 'dark',
+    artStyle: 'fireworks',
     history: [
       {
         date: '22 Nov 2026',
@@ -42,6 +61,7 @@ export const INITIAL_ACTIVE_CARDS: GiftCardItem[] = [
     purchasedDate: '25 Nov 2026',
     status: 'unredeemed',
     theme: 'green',
+    artStyle: 'lagos',
     history: [],
   },
 ];
@@ -56,6 +76,7 @@ export const INITIAL_USED_CARDS: GiftCardItem[] = [
     lastUsedDate: '18 Nov 2026',
     status: 'used',
     theme: 'peach',
+    artStyle: 'gift',
     history: [
       {
         date: '18 Nov 2026',

@@ -162,7 +162,12 @@ export function GiftTransferScreens({
                     key={card.id}
                     className="bg-white flex flex-col gap-[16px] items-start p-[24px] rounded-[12px]"
                   >
-                    <GiftCardVisual amount={card.initialValue} theme={card.theme} />
+                    <GiftCardVisual
+                      amount={card.initialValue}
+                      theme={card.theme}
+                      artStyle={card.artStyle}
+                      colorVariant={card.colorVariant}
+                    />
                     <p className="font-archivo font-semibold text-[16.8px] leading-normal text-[#010817]">
                       {card.status === 'linked' ? 'Linked to a recipient' : 'Not yet redeemed'}
                     </p>

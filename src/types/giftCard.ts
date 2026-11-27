@@ -24,10 +24,29 @@ export type ScreenId =
 
 export type CardTheme = 'green' | 'peach' | 'dark';
 
+export type CardColorVariant =
+  | 'original'
+  | 'green'
+  | 'peach'
+  | 'dark'
+  | 'blue'
+  | 'gold';
+
+export type CardArtStyle =
+  | 'celebration'
+  | 'gift'
+  | 'bouquet'
+  | 'lagos'
+  | 'ankara'
+  | 'fireworks';
+
 export interface Denomination {
   amount: number;
   label: string;
   theme: CardTheme;
+  artStyle: CardArtStyle;
+  occasion: string;
+  colorVariant?: CardColorVariant;
 }
 
 export interface PaymentHistoryItem {
@@ -56,6 +75,8 @@ export interface GiftCardItem {
   lastUsedDate?: string;
   status: 'unredeemed' | 'linked' | 'used';
   theme: CardTheme;
+  artStyle?: CardArtStyle;
+  colorVariant?: CardColorVariant;
   history: PaymentHistoryItem[];
   transferDetails?: TransferDetails;
 }
